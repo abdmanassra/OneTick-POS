@@ -35,7 +35,9 @@ function createWindow() {
   })
 }
 
-
+console.log("hi");
+console.log(app);
+app.removeAllListeners('ready')
 app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {

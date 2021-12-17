@@ -243,7 +243,7 @@ if (auth == undefined) {
                 // })
 
                 $('#parent').text('');
-                $('#categories').html(`<button type="button" id="all" class="btn btn-categories btn-white waves-effect waves-light">All</button> `);
+                $('#categories').html(`<button type="button" id="all" class="btn btn-categories btn-white waves-effect waves-light">الكل</button> `);
 
                 data.forEach(item => {
 
@@ -495,7 +495,7 @@ if (auth == undefined) {
                                 ),
                                 $('<input>', {
                                     class: 'form-control',
-                                    type: 'number',
+                                    type: 'text',
                                     value: data.quantity,
                                     onInput: '$(this).qtInput(' + index + ')'
                                 }),
@@ -781,7 +781,7 @@ if (auth == undefined) {
             <hr>
             <br>
             <p style="text-align: center;">
-             ${settings.footer}
+                OneClick System - 0598986474
              </p>
             </div>`;
 
@@ -1164,14 +1164,14 @@ if (auth == undefined) {
 
                     loadProducts();
                     Swal.fire({
-                        title: 'Product Saved',
-                        text: "Select an option below to continue.",
+                        title: 'تم حفظ المنتج بنجاح',
+                        text: "قم بالاختيار للمتابعة",
                         icon: 'success',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Add another',
-                        cancelButtonText: 'Close'
+                        confirmButtonText: 'اضافة جديد',
+                        cancelButtonText: 'اغلاق'
                     }).then((result) => {
 
                         if (!result.value) {
@@ -1206,14 +1206,14 @@ if (auth == undefined) {
                     loadCategories();
                     loadProducts();
                     Swal.fire({
-                        title: 'Category Saved',
-                        text: "Select an option below to continue.",
+                        title: 'تم حفظ التصنيف بنجاح',
+                        text: "قم بالاختيار للمتابعة",
                         icon: 'success',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Add another',
-                        cancelButtonText: 'Close'
+                        confirmButtonText: 'اضافة جديد',
+                        cancelButtonText: 'اغلاق'
                     }).then((result) => {
 
                         if (!result.value) {

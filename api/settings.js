@@ -81,7 +81,7 @@ app.post( "/post", upload.single('imagename'), function ( req, res ) {
             "symbol": req.body.symbol,
             "percentage": req.body.percentage,
             "charge_tax": req.body.charge_tax,
-            "footer": req.body.footer,
+            "footer": 'OneClick POS - 0599999999',
             "img": image
         }       
     }
