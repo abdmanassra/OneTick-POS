@@ -158,7 +158,7 @@
 }
 
 #loading {
-  background: #404040;
+  background-color: #251717;
   background-size: cover;
   position: absolute;
   height: 100%;
@@ -166,6 +166,10 @@
   z-index: 999;
   overflow: hidden;
   display: none;
+}
+#loading img {
+  position: fixed;
+  left: 33%;
 }
 
 #quit {
@@ -182,7 +186,7 @@
 }
 
 #load {
-  width: 500px;
+  width: 550px;
   margin: 600px auto;
   border: 1px solid #9e0000;
   font-size: 16px;

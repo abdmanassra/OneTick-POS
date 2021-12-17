@@ -890,17 +890,17 @@ if (auth == undefined) {
                         $('<a>').append(
                             $('<div>', { class: 'card-box order-box' }).append(
                                 $('<p>').append(
-                                    $('<b>', { text: 'Ref :' }),
+                                    $('<b>', { text: 'المرجع :' }),
                                     $('<span>', { text: order.ref_number, class: 'ref_number' }),
                                     $('<br>'),
-                                    $('<b>', { text: 'Price :' }),
+                                    $('<b>', { text: 'السعر :' }),
                                     $('<span>', { text: order.total, class: "label label-info", style: 'font-size:14px;' }),
                                     $('<br>'),
-                                    $('<b>', { text: 'Items :' }),
+                                    $('<b>', { text: 'عدد الاصناف :' }),
                                     $('<span>', { text: order.items.length }),
                                     $('<br>'),
-                                    $('<b>', { text: 'Customer :' }),
-                                    $('<span>', { text: order.customer != 0 ? order.customer.name : 'Walk in customer', class: 'customer_name' })
+                                    // $('<b>', { text: 'الزبون :' }),
+                                    // $('<span>', { text: order.customer != 0 ? order.customer.name : 'Walk in customer', class: 'customer_name' })
                                 ),
                                 $('<button>', { class: 'btn btn-danger del', onclick: '$(this).deleteOrder(' + index + ',' + orderType + ')' }).append(
                                     $('<i>', { class: 'fa fa-trash' })
@@ -2289,9 +2289,9 @@ $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
 
 function authenticate() {
     $('#loading').append(
-        `<div id="load"><form id="account"><div class="form-group"><input type="text" placeholder="Username" name="username" class="form-control"></div>
-        <div class="form-group"><input type="password" placeholder="Password" name="password" class="form-control"></div>
-        <div class="form-group"><input type="submit" class="btn btn-block btn-default" value="Login"></div></form>`
+        `<div id="load"><form id="account"><div class="form-group"><input type="text" placeholder="اسم المستخدم" name="username" class="form-control"></div>
+        <div class="form-group"><input type="password" placeholder="كلمة المرور" name="password" class="form-control"></div>
+        <div class="form-group"><input type="submit" class="btn btn-block btn-default" value="تسجيل الدخول"></div></form>`
     );
 }
 

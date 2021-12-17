@@ -25,6 +25,7 @@
     <style>
         body {
             font-family: 'Baloo Bhaijaan 2', cursive !important;
+            overflow: hidden;
         }
     </style>
 
@@ -35,7 +36,7 @@
 
     <div class="main_app">
 
-        <div id="loading"></div>
+        <div id="loading"><img src="assets/images/bg.png" /></div>
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
@@ -83,10 +84,7 @@
 
                     <div class="button-list pull-right m-t-15 m-l-10">
 
-                        <button id="settings" data-toggle="modal" data-target="#settingsModal" type="button"
-                            class="btn btn-default waves-effect waves-light p_five">
-                            <i class="glyphicon glyphicon-cog"></i>
-                        </button>
+
 
                         <button id="transactions" type="button"
                             class="btn btn-default waves-effect waves-light p_three">
@@ -110,10 +108,14 @@
                             </button>
                         </div>
 
-
                         <button type="button" class="btn btn-light waves-effect waves-light" id="cashier">
                             <span class="btn-label"><i class="glyphicon glyphicon-user"></i> </span> <span
                                 id="loggedin-user"></span>
+                        </button>
+
+                        <button id="settings" data-toggle="modal" data-target="#settingsModal" type="button"
+                            class="btn btn-default waves-effect waves-light p_five">
+                            <i class="glyphicon glyphicon-cog"></i>
                         </button>
 
                         <button id="log-out" type="button" class="btn btn-warning waves-effect waves-light">
@@ -133,15 +135,16 @@
 
             <div id="transactions_view">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="card-box">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#tab-01" aria-controls="tab-01" role="tab"
+                                data-toggle="tab">الملخص</a></li>
+                        <li role="presentation"><a href="#tab-02" aria-controls="tab-02" role="tab"
+                                data-toggle="tab">تفاصيل المبيعات</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="tab-01">
                             <div class="row">
-                                <h3 class="col-md-2">التقارير</h3>
-                                <!-- <div class="col-md-1">
-                                    <span>Till</span>
-                                    <select id="tills" class="form-control">
-                                    </select>
-                                </div> -->
+                                <h3 class="col-md-2"> <span>التقارير</span> </h3>
                                 <div class="col-md-2">
                                     <span>البائع</span>
                                     <select id="users" class="form-control">
@@ -164,79 +167,52 @@
                             </div>
                             <hr>
                             <div class="row">
+                                <div class="col-md-4 mr-2" id="productSales">
+                                    <p style="margin-left: 30%; font-size: 40px; font-weight: 500;">المنتجات</p>
+                                    <hr>
+                                    <table class="table tablesaw-enhanced" id="productsSold">
+                                        <thead>
+                                            <tr>
+                                                <th>الاسم</th>
+                                                <th>العدد</th>
+                                                <th>المجمل</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="product_sales"></tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-7" id="totals" style="margin-left: 5%;">
+                                    <p style="margin-left: 45%; font-size: 40px; font-weight: 500;">المجمل</p>
+                                    <hr>
 
-
-                                <div class="row">
-                                    <div class="row">
-                                        <div class="col-md-4 mr-2" id="productSales">
-                                            <p style="margin-left: 30%; font-size: 40px; font-weight: 500;">المنتجات</p>
-                                            <hr>
-                                            <table class="table tablesaw-enhanced" id="productsSold">
-                                                <thead>
-                                                    <tr>
-                                                        <th>الاسم</th>
-                                                        <th>العدد</th>
-                                                        <th>المجمل</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="product_sales"></tbody>
-                                            </table>
-                                        </div>
-                                        <div class="col-md-7" id="totals" style="margin-left: 5%;">
-                                            <p style="margin-left: 45%; font-size: 40px; font-weight: 500;">المجمل</p>
-                                            <hr>
-
-                                            <div class="row ">
-                                                <div id="total_sales" class="btn-success">
-                                                    <h5>المبيعات</h5>
-                                                    <div id="counter">0</div>
-                                                </div>
-
-                                                <!-- <div id="total_transactions" class="col-md-4 btn-warning">
-                                                    <h5>الطلبات</h5>
-                                                    <div id="counter">0</div>
-                                                </div>
-
-                                                <div id="total_items" class="col-md-4 btn-warning">
-                                                    <h5>العدد</h5>
-                                                    <div id="counter">0</div>
-                                                </div>
-
-                                                <div id="total_products" class="col-md-4 btn-warning">
-                                                    <h5>PRODUCTS</h5>
-                                                    <div id="counter">0</div>
-                                                </div> -->
-                                                <!-- <div id="total_profit" class="col-md-3 btn-warning">
-                                                    <h5>TOTAL PROFIT</h5>
-                                                    <div id="counter">0</div>
-                                                </div> -->
-
-                                            </div>
+                                    <div class="row ">
+                                        <div id="total_sales" class="btn-success">
+                                            <h5>المبيعات</h5>
+                                            <div id="counter">0</div>
                                         </div>
 
-                                    </div>
-
-                                    <div class="row">
-                                        <table class="table tablesaw-enhanced" id="transactionList">
-                                            <thead>
-                                                <tr>
-                                                    <th>رقم الفاتورة</th>
-                                                    <th>التاريخ</th>
-                                                    <th>المجمل</th>
-                                                    <th>المدفوع</th>
-                                                    <th>الباقي</th>
-                                                    <th>طريقة الدفع</th>
-                                                    <!-- <th>Profit</th> -->
-                                                    <th>البائع</th>
-                                                    <th>عرض</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="transaction_list"></tbody>
-                                        </table>
                                     </div>
                                 </div>
 
-
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab-02">
+                            <div class="row">
+                                <table class="table tablesaw-enhanced" id="transactionList">
+                                    <thead>
+                                        <tr>
+                                            <th>رقم الفاتورة</th>
+                                            <th>التاريخ</th>
+                                            <th>المجمل</th>
+                                            <th>المدفوع</th>
+                                            <th>الباقي</th>
+                                            <th>طريقة الدفع</th>
+                                            <th>البائع</th>
+                                            <th>عرض</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transaction_list"></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -744,7 +720,7 @@
                             <h4 class="modal-title" id="mySmallModalLabel">المنتجات
                                 <img class="loading m-t-5" style="margin-left: 35%" height="50px"
                                     src="assets/images/loading.gif" alt="">
-                                <button class="btn btn-white pull-right" id="print_list">تحميل</button>
+                                <!-- <button class="btn btn-white pull-right" id="print_list">تحميل</button> -->
                             </h4>
                         </div>
                         <div class="modal-body" id="all_products" style="padding: 20px; padding-right: 40px;">
