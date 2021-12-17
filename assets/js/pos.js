@@ -46,8 +46,8 @@ let customerOrderList = [];
 let ownUserEdit = null;
 let totalPrice = 0;
 let orderTotal = 0;
-let auth_error = 'Incorrect username or password';
-let auth_empty = 'Please enter a username and password';
+let auth_error = 'اسم المستخدم او كلمة المرور خاطئة';
+let auth_empty = 'الرجاء ادخال اسم المستخدم وكلمة المرور';
 let holdOrderlocation = $("#randerHoldOrders");
 let customerOrderLocation = $("#randerCustomerOrders");
 let storage = new Store();
@@ -565,13 +565,13 @@ if (auth == undefined) {
 
             if (cart.length > 0) {
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You are about to remove all items from the cart.",
+                    title: 'هل انت متأكد؟',
+                    text: "سوف يتم حذف جميع الاصناف",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, clear it!'
+                    confirmButtonText: 'حذف الاصناف'
                 }).then((result) => {
 
                     if (result.value) {
@@ -581,8 +581,8 @@ if (auth == undefined) {
                         holdOrder = 0;
 
                         Swal.fire(
-                            'Cleared!',
-                            'All items have been removed.',
+                            'تم الحذف!',
+                            'تم حذف جميع الاصناف',
                             'success'
                         )
                     }
@@ -597,8 +597,8 @@ if (auth == undefined) {
                 $("#paymentModel").modal('toggle');
             } else {
                 Swal.fire(
-                    'Oops!',
-                    'There is nothing to pay!',
+                    'مهلا!',
+                    'لا يوجد طلب لدفعه',
                     'warning'
                 );
             }
@@ -613,8 +613,8 @@ if (auth == undefined) {
                 $("#dueModal").modal('toggle');
             } else {
                 Swal.fire(
-                    'Oops!',
-                    'There is nothing to hold!',
+                    'مهلا!',
+                    'لا يوجد طلب لتعليقه!',
                     'warning'
                 );
             }
@@ -698,8 +698,8 @@ if (auth == undefined) {
 
                 if ($("#customer").val() == 0 && $("#refNumber").val() == "") {
                     Swal.fire(
-                        'Reference Required!',
-                        'You either need to select a customer <br> or enter a reference!',
+                        'المرجع اجباري',
+                        'يجب عليك اضافة مرجع لتعليق الطلب',
                         'warning'
                     )
 
@@ -999,13 +999,13 @@ if (auth == undefined) {
             }
 
             Swal.fire({
-                title: "Delete order?",
-                text: "This will delete the order. Are you sure you want to delete!",
+                title: "حذف الفاتورة؟",
+                text: "سوف يتم حذف الفاتورة, هل انت متأكد من ذلك؟",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'حذف'
             }).then((result) => {
 
                 if (result.value) {
@@ -1022,8 +1022,8 @@ if (auth == undefined) {
                             $(this).getCustomerOrders();
 
                             Swal.fire(
-                                'Deleted!',
-                                'You have deleted the order!',
+                                'تم الحذف!',
+                                'لقد قمت بحذف الفاتورة!',
                                 'success'
                             )
 
@@ -1080,7 +1080,7 @@ if (auth == undefined) {
 
                 }, error: function (data) {
                     $("#newCustomer").modal('hide');
-                    Swal.fire('Error', 'Something went wrong please try again', 'error')
+                    Swal.fire('Error', 'يرجى المحاولة مرة اخرى', 'error')
                 }
             })
         })
@@ -1098,8 +1098,8 @@ if (auth == undefined) {
         $("#confirmPayment").on('click', function () {
             if ($('#payment').val() == "") {
                 Swal.fire(
-                    'Nope!',
-                    'Please enter the amount that was paid!',
+                    'لا يمكن اتمام هذه العملية!',
+                    'الرجاء ادخال القيمة التي تم دفعها!',
                     'warning'
                 );
             }
@@ -1328,13 +1328,13 @@ if (auth == undefined) {
 
         $.fn.deleteProduct = function (id) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You are about to delete this product.",
+                title: 'هل انت متأكد؟',
+                text: "سوف يتم حذف المنتج",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'حذف'
             }).then((result) => {
 
                 if (result.value) {
@@ -1345,8 +1345,8 @@ if (auth == undefined) {
                         success: function (result) {
                             loadProducts();
                             Swal.fire(
-                                'Done!',
-                                'Product deleted',
+                                'تم!',
+                                'تم حذف المنتج',
                                 'success'
                             );
 
@@ -1359,13 +1359,13 @@ if (auth == undefined) {
 
         $.fn.deleteUser = function (id) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You are about to delete this user.",
+                title: 'هل انت متأكد؟',
+                text: "سوف يتم حذف المستخدم",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete!'
+                confirmButtonText: 'حذف'
             }).then((result) => {
 
                 if (result.value) {
@@ -1376,8 +1376,8 @@ if (auth == undefined) {
                         success: function (result) {
                             loadUserList();
                             Swal.fire(
-                                'Done!',
-                                'User deleted',
+                                'تم!',
+                                'تم حذف المستخدم',
                                 'success'
                             );
 
@@ -1390,13 +1390,13 @@ if (auth == undefined) {
 
         $.fn.deleteCategory = function (id) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You are about to delete this category.",
+                title: 'هل انت متأكد؟',
+                text: "سوف يتم حذف التصنيف",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'حذف'
             }).then((result) => {
 
                 if (result.value) {
@@ -1407,8 +1407,8 @@ if (auth == undefined) {
                         success: function (result) {
                             loadCategories();
                             Swal.fire(
-                                'Done!',
-                                'Category deleted',
+                                'تم!',
+                                'تم حذف التصنيف',
                                 'success'
                             );
 
@@ -1593,13 +1593,13 @@ if (auth == undefined) {
         $('#log-out').click(function () {
 
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You are about to log out.",
+                title: 'هل انت متأكد؟',
+                text: "سوف يتم تسجيل الخروج",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Logout'
+                confirmButtonText: 'تسجيل الخروج'
             }).then((result) => {
 
                 if (result.value) {
@@ -2303,7 +2303,7 @@ $('body').on("submit", "#account", function (e) {
     if (formData.username == "" || formData.password == "") {
 
         Swal.fire(
-            'Incomplete form!',
+            'تأكد من الادخال!',
             auth_empty,
             'warning'
         );
@@ -2325,7 +2325,7 @@ $('body').on("submit", "#account", function (e) {
                 }
                 else {
                     Swal.fire(
-                        'Oops!',
+                        'مهلا!',
                         auth_error,
                         'warning'
                     );
@@ -2341,13 +2341,13 @@ $('body').on("submit", "#account", function (e) {
 
 $('#quit').click(function () {
     Swal.fire({
-        title: 'Are you sure?',
-        text: "You are about to close the application.",
+        title: 'هل انت متأكد؟',
+        text: "سوف يتم اغلاق تطبيق نقطة البيع",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Close Application'
+        confirmButtonText: 'اغلاق'
     }).then((result) => {
 
         if (result.value) {
