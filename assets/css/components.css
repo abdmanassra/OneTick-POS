@@ -26,7 +26,7 @@
 .btn-default:focus,
 .btn-default:hover,
 .open > .dropdown-toggle.btn-default {
-  background-color: #a62a2a !important;
+  background-color: #9e0000 !important;
   /* border: 1px solid #5fbeaa !important; */
 }
 .btn-white,

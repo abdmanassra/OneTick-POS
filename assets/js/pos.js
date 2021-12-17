@@ -781,7 +781,7 @@ if (auth == undefined) {
             <hr>
             <br>
             <p style="text-align: center;">
-                OneClick System - 0598986474
+                ONE TICK System - 0598986474
              </p>
             </div>`;
 
