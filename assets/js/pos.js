@@ -155,6 +155,7 @@ if (auth == undefined) {
 
 
     $(document).ready(function () {
+        $("#contractEndSoonMessage").hide();
 
         $(".loading").hide();
 
@@ -198,7 +199,7 @@ if (auth == undefined) {
         if (0 == user.perm_users) { $(".p_four").hide() };
         if (0 == user.perm_settings) { $(".p_five").hide() };
 
-        setInterval(function(){checkCustomerStatus();}, 10000);
+        setInterval(function(){checkCustomerStatus();}, 15000);
 
         function checkCustomerStatus(){
             $.ajax({
@@ -214,10 +215,38 @@ if (auth == undefined) {
                     storage.delete('auth');
                     storage.delete('user');
                     ipcRenderer.send('app-reload', '');
-                });
                     });
+                    });
+                },
+                success: function(data) {
+                    var date = new Date().toDateString();
+                    if (daysBetween(date, data) < 15) {
+                        $( ".contractEndSoonMessage" ).append( $( "<div id='contractEndSoonMessageTemp'> " + 
+                                                    "<div class='alert alert-warning alert-dismissible' role='alert'> " + 
+                                                    " سوف ينتهي ترخيص البرنامج خلال <span id='numberOfDays'>"+
+                                                     daysBetween(date, data) + 
+                                                    "</span>ايام" + 
+                                                    " يرجى التواصل مع فريق التطوير لتجديد ترخيص البرنامج  </div></div>" ) );
+
+                        window.setTimeout(function() {
+                            $("#contractEndSoonMessageTemp").fadeTo(1000, 0).slideUp(1000, function(){
+                                $(this).remove(); 
+                            });
+                        }, 4500);
+                    }
                 }
             });
+        }
+
+        function treatAsUTC(date) {
+            var result = new Date(date);
+            result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+            return result;
+        }
+        
+        function daysBetween(startDate, endDate) {
+            var millisecondsPerDay = 24 * 60 * 60 * 1000;
+            return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
         }
 
         function loadProducts() {

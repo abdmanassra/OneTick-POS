@@ -90,18 +90,18 @@ app.get( "/all", function ( req, res ) {
 app.get("/checkStatus", function(req, res) {
     //get status
     firebase.db.collection('accounts').doc('afc').get()
-    .then(result => 
-        customerStatus = result.data().status
-        );
-
-    console.log({customerStatus});
-    if (customerStatus != 'active') {
-        res.send(500);
-    }
-    else
-    {
-        res.send(200);
-    }
+    .then(result => {
+        customerStatus = result.data().status;
+        let contractEndDate = result.data().contractEndDate;
+        if (customerStatus != 'active') {
+            res.send(500);
+        }
+        else
+        {
+            console.log({contractEndDate});
+            res.send(contractEndDate.toDate().toDateString());
+        }
+    });
 });
 
 app.delete( "/user/:userId", function ( req, res ) {
