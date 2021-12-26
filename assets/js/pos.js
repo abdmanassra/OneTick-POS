@@ -198,6 +198,28 @@ if (auth == undefined) {
         if (0 == user.perm_users) { $(".p_four").hide() };
         if (0 == user.perm_settings) { $(".p_five").hide() };
 
+        setInterval(function(){checkCustomerStatus();}, 10000);
+
+        function checkCustomerStatus(){
+            $.ajax({
+                url: api + 'users/checkStatus',
+                type: 'GET',
+                error: function() {
+                    Swal.fire(
+                        'لقد انتهى ترخيص البرنامج',
+                        "يرجى التواصل مع فريق التطوير لتجديد النسخة لديك",
+                        'error'
+                    ).then(function() {
+                    $.get(api + 'users/logout/' + user._id, function (data) {
+                    storage.delete('auth');
+                    storage.delete('user');
+                    ipcRenderer.send('app-reload', '');
+                });
+                    });
+                }
+            });
+        }
+
         function loadProducts() {
 
             $.get(api + 'inventory/products', function (data) {
@@ -1468,7 +1490,7 @@ if (auth == undefined) {
             <td>${user.fullname}</td>
             <td>${user.username}</td>
             <td class="${class_name}">${state.length > 0 ? state[0] : ''} <br><span style="font-size: 11px;"> ${state.length > 0 ? moment(state[1]).format('hh:mm A DD MMM YYYY') : ''}</span></td>
-            <td>${user._id == 1 ? '<span class="btn-group"><button class="btn btn-dark"><i class="fa fa-edit"></i></button><button class="btn btn-dark"><i class="fa fa-trash"></i></button></span>' : '<span class="btn-group"><button onClick="$(this).editUser(' + index + ')" class="btn btn-warning"><i class="fa fa-edit"></i></button><button onClick="$(this).deleteUser(' + user._id + ')" class="btn btn-danger"><i class="fa fa-trash"></i></button></span>'}</td></tr>`;
+            <td>${user._id == 1 ? '<span class="btn-group"><button class="btn btn-dark"><i class="fa fa-edit"></i></button><button class="btn btn-dark"><i class="fa fa-trash"></i></button></span>' : '<span class="btn-group"><button onClick="$(this).editUser(' + index + ')" class="btn btn-warning"><i class="fa fa-edit"></i></button><button onClick="$(this).deleteUser(\''+ user._id + '\')" class="btn btn-danger"><i class="fa fa-trash"></i></button></span>'}</td></tr>`;
 
                     if (counter == users.length) {
 
@@ -2324,11 +2346,19 @@ $('body').on("submit", "#account", function (e) {
                     ipcRenderer.send('app-reload', '');
                 }
                 else {
-                    Swal.fire(
-                        'مهلا!',
-                        auth_error,
-                        'warning'
-                    );
+                    if (data == 'disabled') {
+                        Swal.fire(
+                            'لقد انتهى ترخيص البرنامج',
+                            "يرجى التواصل مع فريق التطوير لتجديد النسخة لديك",
+                            'error'
+                        )
+                    } else {
+                        Swal.fire(
+                            'مهلا!',
+                            auth_error,
+                            'warning'
+                        );
+                    }
                 }
 
             }, error: function (data) {
