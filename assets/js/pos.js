@@ -231,23 +231,7 @@ if (auth == undefined) {
                       
 
         setInterval(function(){checkCustomerStatus();}, 15000);
-
         
-        function loadSettings(){
-
-            $.get(api + 'settings/get', function (data) {
-
-
-
-                Settings =data.settings;
-                console.log(Settings);
-                });
-
-        }
-
-
-
-
         function checkCustomerStatus(){
             $.ajax({
                 url: api + 'users/checkStatus',
