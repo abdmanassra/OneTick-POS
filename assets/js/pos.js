@@ -173,6 +173,7 @@ if (auth == undefined) {
 
 
     $(document).ready(function () {
+        $("#contractEndSoonMessage").hide();
 
         $(".loading").hide();
 
@@ -231,6 +232,55 @@ if (auth == undefined) {
         }
                       
 
+        setInterval(function(){checkCustomerStatus();}, 15000);
+
+        function checkCustomerStatus(){
+            $.ajax({
+                url: api + 'users/checkStatus',
+                type: 'GET',
+                error: function() {
+                    Swal.fire(
+                        'لقد انتهى ترخيص البرنامج',
+                        "يرجى التواصل مع فريق التطوير لتجديد النسخة لديك",
+                        'error'
+                    ).then(function() {
+                    $.get(api + 'users/logout/' + user._id, function (data) {
+                    storage.delete('auth');
+                    storage.delete('user');
+                    ipcRenderer.send('app-reload', '');
+                    });
+                    });
+                },
+                success: function(data) {
+                    var date = new Date().toDateString();
+                    if (daysBetween(date, data) < 15) {
+                        $( ".contractEndSoonMessage" ).append( $( "<div id='contractEndSoonMessageTemp'> " + 
+                                                    "<div class='alert alert-warning alert-dismissible' role='alert'> " + 
+                                                    " سوف ينتهي ترخيص البرنامج خلال <span id='numberOfDays'>"+
+                                                     daysBetween(date, data) + 
+                                                    "</span>ايام" + 
+                                                    " يرجى التواصل مع فريق التطوير لتجديد ترخيص البرنامج  </div></div>" ) );
+
+                        window.setTimeout(function() {
+                            $("#contractEndSoonMessageTemp").fadeTo(1000, 0).slideUp(1000, function(){
+                                $(this).remove(); 
+                            });
+                        }, 4500);
+                    }
+                }
+            });
+        }
+
+        function treatAsUTC(date) {
+            var result = new Date(date);
+            result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+            return result;
+        }
+        
+        function daysBetween(startDate, endDate) {
+            var millisecondsPerDay = 24 * 60 * 60 * 1000;
+            return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
+        }
 
         function loadProducts() {
 
@@ -1632,7 +1682,7 @@ if (auth == undefined) {
             <td>${user.fullname}</td>
             <td>${user.username}</td>
             <td class="${class_name}">${state.length > 0 ? state[0] : ''} <br><span style="font-size: 11px;"> ${state.length > 0 ? moment(state[1]).format('hh:mm A DD MMM YYYY') : ''}</span></td>
-            <td>${user._id == 1 ? '<span class="btn-group"><button class="btn btn-dark"><i class="fa fa-edit"></i></button><button class="btn btn-dark"><i class="fa fa-trash"></i></button></span>' : '<span class="btn-group"><button onClick="$(this).editUser(' + index + ')" class="btn btn-warning"><i class="fa fa-edit"></i></button><button onClick="$(this).deleteUser(' + user._id + ')" class="btn btn-danger"><i class="fa fa-trash"></i></button></span>'}</td></tr>`;
+            <td>${user._id == 1 ? '<span class="btn-group"><button class="btn btn-dark"><i class="fa fa-edit"></i></button><button class="btn btn-dark"><i class="fa fa-trash"></i></button></span>' : '<span class="btn-group"><button onClick="$(this).editUser(' + index + ')" class="btn btn-warning"><i class="fa fa-edit"></i></button><button onClick="$(this).deleteUser(\''+ user._id + '\')" class="btn btn-danger"><i class="fa fa-trash"></i></button></span>'}</td></tr>`;
 
                     if (counter == users.length) {
 
@@ -2541,11 +2591,19 @@ $('body').on("submit", "#account", function (e) {
                     ipcRenderer.send('app-reload', '');
                 }
                 else {
-                    Swal.fire(
-                        'مهلا!',
-                        auth_error,
-                        'warning'
-                    );
+                    if (data == 'disabled') {
+                        Swal.fire(
+                            'لقد انتهى ترخيص البرنامج',
+                            "يرجى التواصل مع فريق التطوير لتجديد النسخة لديك",
+                            'error'
+                        )
+                    } else {
+                        Swal.fire(
+                            'مهلا!',
+                            auth_error,
+                            'warning'
+                        );
+                    }
                 }
 
             }, error: function (data) {
