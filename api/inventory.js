@@ -94,6 +94,7 @@ app.post("/product", upload.single('imagename'), function (req, res) {
         // profit: parseInt(req.body.profit),
         price: req.body.price,
         category: req.body.category,
+        printer:req.body.printer,
         // quantity: req.body.quantity == "" ? 0 : req.body.quantity,
         name: req.body.name,
         stock: req.body.stock == "on" ? 0 : 1,

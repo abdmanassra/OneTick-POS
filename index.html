@@ -63,11 +63,11 @@
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
-
+<!-- 
                         <button id="viewRefOrders" data-toggle="modal" data-target="#holdOrdersModal" type="button"
                             class="btn btn-info waves-effect waves-light">
                             <span class="btn-label"><i class="fa fa-shopping-basket"></i> </span> الطلبات المعلقة
-                        </button>
+                        </button> -->
 
                         <!-- <button id="viewCustomerOrders" data-toggle="modal" data-target="#customerModal" type="button"
                             onclick="$(this).getCustomerOrders()" class="btn btn-info waves-effect waves-light">
@@ -193,9 +193,18 @@
                                     <hr>
 
                                     <div class="row ">
-                                        <div id="total_sales" class="btn-success">
-                                            <h5>المبيعات</h5>
-                                            <div id="counter">0</div>
+                                        <div class="col-md-6 form-group">
+                                            <div id="total_sales" class="btn-success">
+                                                <h5>المبيعات</h5>
+                                                <div id="counter">0</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <div onclick="$(this).closeCash()" id="close_cash" class="btn-danger">
+                                                <h5>اغلاق الكاش</h5>
+                                                <div id="counter"></div>
+
+                                            </div>
                                         </div>
 
                                     </div>
@@ -216,6 +225,7 @@
                                             <th>طريقة الدفع</th>
                                             <th>البائع</th>
                                             <th>عرض</th>
+                                            <th>الغاء الفاتورة</th>
                                         </tr>
                                     </thead>
                                     <tbody id="transaction_list"></tbody>
@@ -281,13 +291,14 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 50px !important;">#</th>
-                                            <th style="width: 480px !important;">الصنف</th>
-                                            <th style="width: 220px !important;">الكمية</th>
+                                            <th >الصنف</th>
+                                            <th >الكمية</th>
                                             <th>السعر</th>
                                             <!-- <th width="5px">
                                                 <button onclick="$(this).cancelOrder()" class="btn btn-danger btn-xs"><i
                                                         class="fa fa-times"></i></button>
                                             </th> -->
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -304,8 +315,8 @@
                                 <div class="col-md-3 h3" style="display: none;">Total Item(s)</div>
                                 <div class="col-md-3 h3" style="display: none;">: <sapn id="total">0</sapn>
                                 </div>
-                                <div class="col-md-6 h2">السعر :</div>
-                                <div class="col-md-6 h2"> <span id="price">0.0</span></div>
+                                <div class="col-md-6 h3">السعر :</div>
+                                <div class="col-md-6 h3"> <span id="price">0.0</span></div>
                             </div>
                             <!-- <div class="row">
                                     <div class="col-md-3">Discount</div>
@@ -346,6 +357,10 @@
                                 </div>
 
                             </div>
+                            <div class="row"
+                            id="randerHoldOrders">
+                            <p>الرجاء الانتظار <span class="dot"></span> </p>
+                        </div>
 
                         </div>
                     </div>
@@ -662,6 +677,10 @@
                                     <input type="text" required="required" name="price" placeholder="السعر"
                                         class="form-control" id="product_price">
                                 </div>
+                                <div class="form-group">
+                                    <label for="userName"> الطابعة</label>
+                                    <select name="printer" class="form-control" id="printer" multiple></select>
+                                </div>
                                 <!-- <div class="form-group">
                                     <label for="userName">Stock</label>
                                     <input type="text" name="quantity" placeholder="Available stock" value="10000"
@@ -901,10 +920,7 @@
                                 class="holdOrderInput form-control">
                             <div class="holdOrderKeyboard"></div>
                             <br>
-                            <div class="row" style="height: 460px;overflow-x: hidden;overflow-y:scroll"
-                                id="randerHoldOrders">
-                                <p>الرجاء الانتظار <span class="dot"></span> </p>
-                            </div>
+                        
                         </div>
                     </div>
                 </div>
@@ -946,7 +962,7 @@
                             <button class="btn btn-sm btn-default" onclick="$(this).print()">طباعة</button> <br> <button
                                 type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         </div>
-                        <div class="modal-body" id="viewTransaction">
+                        <div class="modal-body" id="viewTransaction" style="color:black !important; font-weight: bold; "; >
                         </div>
 
                         <!-- <div class="alert alert-danger" style="font-size:11px;">Right-Click and Reload if you get stuck
@@ -1040,6 +1056,16 @@
                                         <div class="form-group">
                                             <label for="userName">رقم الهاتف</label>
                                             <input type="text" name="contact" class="form-control" id="contact">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="app">عرض الاصناف</label>
+                                            <select name="view" id="view" class="form-control">
+                                                <option value="1">صورة مع تفاصيل</option>
+                                                <option value="2">صورة  فقط</option>
+
+                                                <!-- <option>Network Point of Sale Terminal</option>
+                                                <option>Network Point of Sale Server</option> -->
+                                            </select>
                                         </div>
                                         <div class="form-group" style="display: none;">
                                             <label for="userName">الضريبة</label>

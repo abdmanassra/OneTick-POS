@@ -17,6 +17,7 @@
     "btoa": "^1.2.1",
     "dotenv": "^10.0.0",
     "electron-context-menu": "^0.15.1",
+    "electron-pos-printer": "^1.2.0",
     "electron-store": "^5.1.0",
     "express": "^4.16.2",
     "express-fileupload": "^1.1.6",
@@ -25,6 +26,7 @@
     "https": "^1.0.0",
     "is-port-reachable": "^2.0.1",
     "jquery": "^3.4.1",
+    "js-sha256": "^0.9.0",
     "jsbarcode": "^3.11.0",
     "jspdf": "^1.5.3",
     "macaddress": "^0.2.9",
@@ -35,6 +37,7 @@
     "notiflix": "^2.4.0",
     "path": "^0.12.7",
     "print-js": "^1.0.63",
+    "qz-tray": "^2.2.1",
     "socket.io": "^2.3.0",
     "sweetalert2": "^9.5.4",
     "xmlhttprequest": "^1.8.0"
@@ -59,7 +62,7 @@
   },
   "devDependencies": {
     "cross-env": "^6.0.3",
-    "electron": "^6.0.12",
+    "electron": "^9.1.0",
     "electron-builder": "^21.2.0",
     "electron-is-dev": "^1.1.0",
     "electron-packager": "^15.0.0",
