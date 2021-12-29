@@ -7,6 +7,10 @@ const server = require('./server');
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path')
 
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
+
+
 const contextMenu = require('electron-context-menu');
 
 let mainWindow

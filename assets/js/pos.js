@@ -216,6 +216,20 @@ if (auth == undefined) {
         if (0 == user.perm_users) { $(".p_four").hide() };
         if (0 == user.perm_settings) { $(".p_five").hide() };
 
+
+        function loadSettings(){
+
+            $.get(api + 'settings/get', function (data) {
+
+                
+    
+                Settings =data.settings;
+                console.log(Settings);
+                });
+
+        }
+                      
+
         setInterval(function(){checkCustomerStatus();}, 15000);
 
         
@@ -336,6 +350,8 @@ if (auth == undefined) {
                 // })
 
                 $('#parent').text('');
+
+
                 $('#categories').html(`<button type="button" id="all" class="btn btn-categories btn-white waves-effect waves-light">الكل</button> `);
 
                 data.forEach(item => {
@@ -358,7 +374,6 @@ if (auth == undefined) {
                     </div>
                 </div>`;
                     }
-
                         else{
                              item_info = `<div class="col-lg-2 box ${item.category}"
                             onclick="$(this).addToCart(${item._id})">
@@ -559,8 +574,7 @@ if (auth == undefined) {
 
                 if (result.value) {
 
-                    $.post(api + 'transactions/delete/', function (data) {
-
+                    $.post(api + 'delete/', function (data) {
                         console.log(data);
                     });
 
@@ -572,7 +586,6 @@ if (auth == undefined) {
                 }
             });
         }
-
 
 
         $.fn.calculateCart = function () {
@@ -739,6 +752,7 @@ if (auth == undefined) {
                 );
             }
 
+
         });
 
 
@@ -809,13 +823,10 @@ if (auth == undefined) {
             tableFooterStyle: 'color: #000000;',
          }
         ];
-
-
         $.fn.submitDueOrder = function (status) {
 
             let items = "";
             let payment = 0;
-
             widthPage = 300;
             printerName = "Microsoft Print to PDF";
             const options = {
@@ -843,6 +854,7 @@ if (auth == undefined) {
                 items += "<tr><td>" + item.product_name + "</td><td>" + item.quantity + "</td><td>" + parseFloat(item.price).toFixed(2) + " " + settings.symbol + "</td></tr>";
 
             });
+    
 
             let currentTime = new Date(moment());
 
@@ -1717,7 +1729,6 @@ if (auth == undefined) {
             //     if (nameA > nameB) {
             //       return 1;
             //     }
-
             //     // names must be equal
             //     return 0;
             //   });
@@ -1726,6 +1737,8 @@ if (auth == undefined) {
             $('#product_list').empty();
             $('#productList').DataTable().destroy();
             let delay = 0;
+          
+            
             products.forEach((product, index) => {
 
                 counter++;
@@ -1733,6 +1746,7 @@ if (auth == undefined) {
                 let category = allCategories.filter(function (category) {
                     return category._id == product.category;
                 });
+              
 
 
 
