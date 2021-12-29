@@ -172,8 +172,6 @@ if (auth == undefined) {
 
 
     $(document).ready(function () {
-        $("#contractEndSoonMessage").hide();
-
         $(".loading").hide();
 
         loadCategories();
@@ -253,7 +251,7 @@ if (auth == undefined) {
                     var date = new Date().toDateString();
                     if (daysBetween(date, data) < 15) {
                         $( ".contractEndSoonMessage" ).append( $( "<div id='contractEndSoonMessageTemp'> " + 
-                                                    "<div class='alert alert-warning alert-dismissible' role='alert'> " + 
+                                                    "<div class='alert alert-warning alert-dismissible  m-t-5' role='alert'> " + 
                                                     " سوف ينتهي ترخيص البرنامج خلال <span id='numberOfDays'>"+
                                                      daysBetween(date, data) + 
                                                     "</span>ايام" + 
