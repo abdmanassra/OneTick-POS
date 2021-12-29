@@ -319,13 +319,14 @@ a:focus {
 }
 /* Card Box */
 .card-box {
-  padding: 40px;
+  /* padding: 40px; */
   border: 1px solid rgba(54, 64, 74, 0.05);
   -webkit-border-radius: 5px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   background-clip: padding-box;
-  margin-bottom: 20px;
+  padding: 5px;
+  margin-bottom: 5px;
   background-color: #ffffff;
 }
 /* Grid page */

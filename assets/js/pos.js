@@ -32,6 +32,8 @@ let { ipcRenderer } = require('electron');
 let dotInterval = setInterval(function () { $(".dot").text('.') }, 3000);
 let Store = require('electron-store');
 const remote = require('electron').remote;
+const { PosPrinter } = remote.require("electron-pos-printer");// printer lib
+const { qz } = remote.require("qz-tray");
 const app = remote.app;
 let img_path = app.getPath('appData') + '/POS/uploads/';
 let api = 'http://' + host + ':' + port + '/api/';
@@ -61,6 +63,21 @@ let end_date = moment(end).toDate();
 let by_till = 0;
 let by_user = 0;
 let by_status = 1;
+// let Settings = {}
+//var se =1;
+
+
+
+/*************************************** Printers Code ************************************/
+let webContents = remote.getCurrentWebContents();
+let printers = webContents.getPrinters(); //list the printers
+$('#printer').html(`<option value="0">Select</option>`);
+printers.forEach((printer, i) => {
+    $('#printer').append(`<option value="${printer.name}">${printer.name}</option>`);
+});
+
+
+/*************************************** Printers Code ************************************/
 
 $(function () {
 
@@ -162,7 +179,7 @@ if (auth == undefined) {
         loadCategories();
         loadProducts();
         loadCustomers();
-
+        // loadSettings();
 
         if (settings && settings.symbol) {
             $("#price_curr, #payment_curr, #change_curr").text(settings.symbol);
@@ -200,6 +217,22 @@ if (auth == undefined) {
         if (0 == user.perm_settings) { $(".p_five").hide() };
 
         setInterval(function(){checkCustomerStatus();}, 15000);
+
+        
+        function loadSettings(){
+
+            $.get(api + 'settings/get', function (data) {
+
+
+
+                Settings =data.settings;
+                console.log(Settings);
+                });
+
+        }
+
+
+
 
         function checkCustomerStatus(){
             $.ajax({
@@ -250,6 +283,15 @@ if (auth == undefined) {
         }
 
         function loadProducts() {
+
+            var Settings = {};          
+            $.get(api + 'settings/get', function (data) {
+
+
+
+                Settings =data.settings;
+                console.log(Settings);
+                });
 
             $.get(api + 'inventory/products', function (data) {
 
@@ -302,15 +344,28 @@ if (auth == undefined) {
                         categories.push(item.category);
                     }
 
-                    let item_info = `<div class="col-lg-2 box ${item.category}"
-                                onclick="$(this).addToCart(${item._id})">
-                            <div class="widget-panel widget-style-2 ">                    
-                            <div id="image"><img src="${item.img == "" ? "./assets/images/default.jpg" : img_path + item.img}" id="product_img" alt=""></div>                    
-                                        <div class="text-muted m-t-5 text-center">
-                                        <div class="name" id="product_name">${item.name}</div> 
-                                        <sp class="text-success text-center"><b data-plugin="counterup">${item.price + " " + settings.symbol}</b> </sp>
-                            </div>
-                        </div>`;
+                    console.log(Settings);
+
+                    let item_info  = '';
+                    if(Settings.view == 1){
+                         item_info = `<div class="col-lg-2 box ${item.category}"
+                        onclick="$(this).addToCart(${item._id})">
+                    <div class="widget-panel widget-style-2 ">                    
+                    <div id="image"><img src="${item.img == "" ? "./assets/images/default.jpg" : img_path + item.img}" id="product_img" alt=""></div>                    
+                                <div class="text-muted m-t-5 text-center">
+                                <div class="name" id="product_name">${item.name}</div> 
+                                <sp class="text-success text-center"><b data-plugin="counterup">${item.price + " " + settings.symbol}</b> </sp>
+                    </div>
+                </div>`;
+                    }
+
+                        else{
+                             item_info = `<div class="col-lg-2 box ${item.category}"
+                            onclick="$(this).addToCart(${item._id})">
+                        <div class="widget-panel widget-style-2 ">                    
+                        <div id="image"><img src="${item.img == "" ? "./assets/images/default.jpg" : img_path + item.img}" id="product_img" alt=""></div>                    
+                    </div>`;
+                        }
                     $('#parent').append(item_info);
                 });
 
@@ -488,6 +543,36 @@ if (auth == undefined) {
         $.fn.setIndex = function (value) {
             index = value;
         }
+
+        $.fn.closeCash = function(){
+
+
+            Swal.fire({
+                title: 'هل انت متأكد؟',
+                text: "سوف يتم حذف جميع الطلبيات",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'اغلاق الكاش'
+            }).then((result) => {
+
+                if (result.value) {
+
+                    $.post(api + 'transactions/delete/', function (data) {
+
+                        console.log(data);
+                    });
+
+                    Swal.fire(
+                        'تم الحذف!',
+                        'تم حذف جميع الاصناف',
+                        'success'
+                    )
+                }
+            });
+        }
+
 
 
         $.fn.calculateCart = function () {
@@ -676,11 +761,82 @@ if (auth == undefined) {
             alert("print job complete");
         }
 
+        let printerName;
+        let widthPage;
+        const print_data = [
+        //     {
+        //       type: 'image',                                       
+        //       path: 'assets/images/untitled.png',     // file path
+        //       position: 'center',                                  // position of image: 'left' | 'center' | 'right'
+        //       width: 60,                                           // width of image in px; default: auto
+        //       height: 60,                                          // width of image in px; default: 50 or '50px'
+        //    },
+           {
+            type: 'table',
+            // style the table
+            style: 'border: 1px solid #ddd',
+            // list of the columns to be rendered in the table header
+            tableHeader: ['Price', 'Qty', 'Item'],
+            // multi dimensional array depicting the rows and columns of the table body
+            tableBody: [
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+                [2, 2,'وجبة مرح'],
+
+                ['subtotal',':',2],
+                ['Discount',':',2],
+
+            ],
+            // list of columns to be rendered in the table footer
+            // custom style for the table header
+            tableHeaderStyle: 'color: #000000;',
+            // custom style for the table body
+            tableBodyStyle: 'color:#000000;border: 0.5px solid #000; font-weight:bold;',
+            // custom style for the table footer
+            tableFooterStyle: 'color: #000000;',
+         }
+        ];
+
 
         $.fn.submitDueOrder = function (status) {
 
             let items = "";
             let payment = 0;
+
+            widthPage = 300;
+            printerName = "Microsoft Print to PDF";
+            const options = {
+                preview: false, // Preview in window or print
+                width: widthPage, //  width of content body
+                margin: "0 0 0 0", // margin of content body
+                copies: 1, // Number of copies to print
+                printerName: printerName, // printerName: string, check it at webContent.getPrinters()
+                timeOutPerLine: 400,
+                silent: true,
+              };
+
+            if (printerName && widthPage) {
+                PosPrinter.print(print_data, options)
+                  .then(() => {})
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              } else {
+                alert("Select the printer and the width");
+              }
 
             cart.forEach(item => {
 
@@ -939,16 +1095,16 @@ if (auth == undefined) {
                 renderLocation.append(
                     $('<div>', { class: orderType == 1 ? 'col-md-3 order' : 'col-md-3 customer-order' }).append(
                         $('<a>').append(
-                            $('<div>', { class: 'card-box order-box' }).append(
+                            $('<div>', { class: 'card-box order-box text-center' }).append(
                                 $('<p>').append(
                                     $('<b>', { text: 'المرجع :' }),
                                     $('<span>', { text: order.ref_number, class: 'ref_number' }),
-                                    $('<br>'),
-                                    $('<b>', { text: 'السعر :' }),
-                                    $('<span>', { text: order.total, class: "label label-info", style: 'font-size:14px;' }),
-                                    $('<br>'),
-                                    $('<b>', { text: 'عدد الاصناف :' }),
-                                    $('<span>', { text: order.items.length }),
+                                    // $('<br>'),
+                                    // $('<b>', { text: 'السعر :' }),
+                                    // $('<span>', { text: order.total, class: "label label-info", style: 'font-size:14px;' }),
+                                    // $('<br>'),
+                                    // $('<b>', { text: 'عدد الاصناف :' }),
+                                    // $('<span>', { text: order.items.length }),
                                     $('<br>'),
                                     // $('<b>', { text: 'الزبون :' }),
                                     // $('<span>', { text: order.customer != 0 ? order.customer.name : 'Walk in customer', class: 'customer_name' })
@@ -1542,7 +1698,29 @@ if (auth == undefined) {
 
 
         function loadProductList() {
-            let products = [...allProducts];
+            let products = [...allProducts].sort(function (a, b) {
+                return a.category - b.category;
+              });;
+
+            console.log(products)
+
+            // products.sort(function (a, b) {
+            //     return a.category - b.category;
+            //   });
+
+            // products.sort(function(a, b) {
+            //     var nameA = a.cate.toUpperCase(); // ignore upper and lowercase
+            //     var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+            //     if (nameA < nameB) {
+            //       return -1;
+            //     }
+            //     if (nameA > nameB) {
+            //       return 1;
+            //     }
+
+            //     // names must be equal
+            //     return 0;
+            //   });
             let product_list = '';
             let counter = 0;
             $('#product_list').empty();
@@ -1574,8 +1752,8 @@ if (auth == undefined) {
                     });
 
                     $('#productList').DataTable({
-                        "order": [[1, "desc"]]
-                        , "autoWidth": false
+                        // "order": [[1, "desc"]]
+                        "autoWidth": false
                         , "info": true
                         , "JQueryUI": true
                         , "ordering": true
@@ -1588,8 +1766,9 @@ if (auth == undefined) {
 
 
         function loadCategoryList() {
-            let products = [...allProducts];
-            let category_list = '';
+            let products = [...allProducts].sort(function (a, b) {
+                return a.category - b.category;
+              });;            let category_list = '';
             let counter = 0;
             $('#category_list').empty();
             $('#categoryList').DataTable().destroy();
@@ -2034,8 +2213,10 @@ function loadTransactions() {
                                 <td>${trans.change ? Math.abs(trans.change).toFixed(2) + " " + settings.symbol : ''}</td>
                                 <td>${trans.paid == "" ? "" : trans.payment_type == 0 ? "Cash" : 'Card'}</td>
                                 <td>${trans.user}</td>
-                                <td>${trans.paid == "" ? '<button class="btn btn-dark"><i class="fa fa-search-plus"></i></button>' : '<button onClick="$(this).viewTransaction(' + index + ')" class="btn btn-info"><i class="fa fa-search-plus"></i></button></td>'}</tr>
-                    `;
+                                <td>${trans.paid == "" ? '<button class="btn btn-dark"><i class="fa fa-search-plus"></i></button>' : '<button onClick="$(this).viewTransaction(' + index + ')" class="btn btn-info"><i class="fa fa-search-plus"></i></button></td>'}
+                                <td><button onClick="$(this).deleteTransaction(${trans.order})" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
+                                </tr>
+                                `;
                 // subProfit = 0;
                 if (counter == transactions.length) {
 
@@ -2171,6 +2352,29 @@ function tillFilter(tills) {
     $('#tills').append(`<option value="0">All</option>`);
     tills.forEach(till => {
         $('#tills').append(`<option value="${till}">${till}</option>`);
+    });
+
+}
+
+$.fn.deleteTransaction = function(id){
+
+
+    console.log(id);
+    Swal.fire({
+        title: 'هل انت متأكد؟',
+        text: "سوف يتم حذف الطلبية",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: ' حذف'
+    }).then((result) => {
+
+        if (result.value) {
+            $.post(api + 'transactions/delete/' + id, function (data) {
+                console.log(data);
+            });
+        }
     });
 
 }
