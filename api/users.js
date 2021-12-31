@@ -2,13 +2,18 @@ const app = require( "express")();
 const bodyParser = require( "body-parser" );
 const btoa = require('btoa');
 app.use( bodyParser.json() );
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 module.exports = app;
 //using firebase
 var firebase = require('./firebaseConfig');
-const usersDb = firebase.db.collection('accounts').doc('afc').collection('users'); 
+const env = 'testEnv';
+const usersDb = firebase.db.collection('accounts').doc(env).collection('users'); 
+const mainInfo = firebase.db.collection('accounts').doc(env);
 let customerStatus = "disabled";
-firebase.db.collection('accounts').doc('afc').get()
+let pcStatus = "disabled";
+firebase.db.collection('accounts').doc(env).get()
     .then(result => 
         customerStatus = result.data().status
         );
@@ -47,33 +52,50 @@ app.get( "/logout/:userId", function ( req, res ) {
     }
 });
 
-
-
 app.post( "/login", async function ( req, res ) {
-    firebase.db.collection('accounts').doc('afc').get()
-    .then(result => 
-        customerStatus = result.data().status
-        );
 
-    if (customerStatus != 'active') {
-        res.send("disabled");
-    }
-    let query = usersDb.where("username", "==", req.body.username).where("password", "==", btoa(req.body.password));
-    const result = query.get().then(querySnapshot => {
-        if (querySnapshot.size > 0) {
+    //check license status
+    firebase.db.collection('accounts').doc(env).get()
+    .then((result => 
+        {
+        customerStatus = result.data().status;
+        const dbSerialNumber = result.data().serialNumber;
 
-          const data = querySnapshot.docs.map(documentSnapshot => {
-            return { _id: documentSnapshot.id.toString(), ...documentSnapshot.data() }
-          });
-          //update user status 
-          usersDb.doc(data[0]._id).update({status: 'Logged In_'+ new Date()});
-          console.log(data[0]);
-          res.send(data[0]);
-        } else {
-            res.send(null);
+        async function puts(error, stdout, stderr) {  
+            var rgx = /\s/gi;
+            var serialNumber = stdout.replace(rgx, "");
+            serialNumber = serialNumber.replace("SerialNumber", "");
+
+            if (dbSerialNumber == serialNumber) {
+                console.log('Pc validated!');
+                pcStatus = 'active';
+            }
+
+            if (customerStatus != 'active' || pcStatus != 'active') {
+                res.send("disabled");
+            }
         }
-    }).catch(err => {
-        console.log(err);
+        exec("wmic DISKDRIVE get SerialNumber", puts);
+    })).then(function() {
+        let query = usersDb.where("username", "==", req.body.username).where("password", "==", btoa(req.body.password));
+        const result = query.get().then(querySnapshot => {
+            if (querySnapshot.size > 0) {
+    
+              const data = querySnapshot.docs.map(documentSnapshot => {
+                return { _id: documentSnapshot.id.toString(), ...documentSnapshot.data() }
+              });
+              //update user status 
+              usersDb.doc(data[0]._id).update({status: 'Logged In_'+ new Date()});
+              console.log(data[0]);
+              res.send(data[0]);
+            } else {
+                res.send(null);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+        }, function() {
+        console.log("error on second callback");
     });
 } );
 
@@ -89,7 +111,7 @@ app.get( "/all", function ( req, res ) {
 
 app.get("/checkStatus", function(req, res) {
     //get status
-    firebase.db.collection('accounts').doc('afc').get()
+    firebase.db.collection('accounts').doc(env).get()
     .then(result => {
         customerStatus = result.data().status;
         let contractEndDate = result.data().contractEndDate;
@@ -163,6 +185,28 @@ app.get( "/check", async function ( req, res ) {
             "status": "1"
           }
           usersDb.doc('1').set(User);
+
+          //set serial number to end user account 
+          function puts(error, stdout, stderr) {  
+            var rgx = /\s/gi;
+            var serialNumber = stdout.replace(rgx, "");
+            serialNumber = serialNumber.replace("SerialNumber", "");
+
+            //insert init values to firebase db
+            mainInfo.set({
+                serialNumber: serialNumber,
+                status: "active",
+                contractStartDate: firebase.firebase.firestore.Timestamp.fromDate(new Date()),
+                contractEndDate: firebase.firebase.firestore.Timestamp.fromDate(new Date(new Date().setFullYear(new Date().getFullYear() + 1)))
+            })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
+
+            }
+            exec("wmic DISKDRIVE get SerialNumber", puts);
     }
 } );
- 
