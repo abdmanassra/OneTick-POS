@@ -42,6 +42,7 @@ let jsPDF = require('jspdf');
 let html2canvas = require('html2canvas');
 let JsBarcode = require('jsbarcode');
 let macaddress = require('macaddress');
+const { transform } = require('async');
 let categories = [];
 let holdOrderList = [];
 let customerOrderList = [];
@@ -74,6 +75,9 @@ let printers = webContents.getPrinters(); //list the printers
 $('#printer').html(`<option value="0">Select</option>`);
 printers.forEach((printer, i) => {
     $('#printer').append(`<option value="${printer.name}">${printer.name}</option>`);
+});
+printers.forEach((printer, i) => {
+    $('#printer1').append(`<option value="${printer.name}">${printer.name}</option>`);
 });
 
 
@@ -188,6 +192,7 @@ if (auth == undefined) {
             fontAwesomeIconColor: 'rgba(0,0,0,0.2)',
             backOverlayColor: 'rgba(238,191,49,0.2)',
           }});
+        loadSettings();
 
         if (settings && settings.symbol) {
             $("#price_curr, #payment_curr, #change_curr").text(settings.symbol);
@@ -225,17 +230,6 @@ if (auth == undefined) {
         if (0 == user.perm_settings) { $(".p_five").hide() };
 
 
-        function loadSettings(){
-
-            $.get(api + 'settings/get', function (data) {
-
-                
-    
-                Settings =data.settings;
-                console.log(Settings);
-                });
-
-        }
                       
 
         setInterval(function(){checkCustomerStatus();}, 15000);
@@ -385,9 +379,90 @@ if (auth == undefined) {
                 $('#category').html(`<option value="0">Select</option>`);
                 allCategories.forEach(category => {
                     $('#category').append(`<option value="${category._id}">${category.name}</option>`);
+                    $('#category1').append(`<option value="${category._id}">${category.name}</option>`);
+
                 });
             });
         }
+
+        $.fn.filterByCat = function(value){
+
+            if(value == 1){
+
+                loadProductList();
+            }
+
+            else{
+                const result = allProducts.filter(function(el) {
+                    return el.category == value;
+                  })
+    
+    
+    
+                console.log(result);
+                let product_list = '';
+                let counter = 0;
+                $('#product_list').empty();
+                $('#productList').DataTable().destroy();
+                let delay = 0;
+              
+                
+                
+                result.forEach((product, index) => {
+    
+                    counter++;
+    
+                    let category = allCategories.filter(function (category) {
+                        return category._id == product.category;
+                    });
+                  
+    
+    
+    
+                    product_list += `<tr>
+                <td><img style="max-height: 50px; max-width: 50px; border: 1px solid #ddd;" src="${product.img == "" ? "./assets/images/default.jpg" : img_path + product.img}" id="product_img"></td>
+                <td>${product.name}</td>
+                <td>${product.price} ${'₪'}</td>
+                <td>${category.length > 0 ? category[0].name : ''}</td>
+                <td class="nobr"><span class="btn-group"><button onClick="$(this).editProduct(${index})" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button><button onClick="$(this).deleteProduct(${product._id})" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></span></td></tr>`;
+    
+             
+    
+                });
+                       if (counter == result.length) {
+    
+                        $('#product_list').html(product_list);
+    
+                        result.forEach(pro => {
+                            $("#" + pro._id + "");
+                        });
+    
+                        $('#productList').DataTable({
+                            // "order": [[1, "desc"]]
+                            "autoWidth": false
+                            , "info": true
+                            , "JQueryUI": true
+                            , "ordering": true
+                            , "paging": false
+                        });
+                    }
+                    if(counter == 0){
+                        $('#product_list').empty();
+                        $('#productList').DataTable().destroy();
+                    }
+
+                console.log(counter);
+            }
+
+
+            // return allProducts.filter(function(el) {
+            //     return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
+            //   })
+
+        }
+        function checkCat(id) {
+            return id = value;
+          }
 
 
         function loadCustomers() {
@@ -512,6 +587,8 @@ if (auth == undefined) {
                 id: data._id,
                 product_name: data.name,
                 price: data.price,
+                printer: data.printer,
+
                 quantity: 1
             };
 
@@ -555,20 +632,39 @@ if (auth == undefined) {
 
                 if (result.value) {
 
-                    $.post(api + 'delete/', function (data) {
+                    $.get(api + 'all/', function (data) {
                         console.log(data);
+                        let tran = data;
+
+                        for(var i=0; i< tran.length;i++){
+                            $.ajax({
+                                url: api + 'delete/' + tran[i].order,
+                                type: 'DELETE',
+                                success: function (result) {
+                               
+        
+                                }
+                            });
+
+                        }
+                        Swal.fire(
+                            'تم الحذف!',
+                            'تم حذف جميع الاصناف',
+                            'success'
+                        ).then((result) =>{
+                            
+                            window.location.reload();
+
+                        })
                     });
 
-                    Swal.fire(
-                        'تم الحذف!',
-                        'تم حذف جميع الاصناف',
-                        'success'
-                    )
+                   
                 }
             });
         }
 
 
+        let Ttotal=0;
         $.fn.calculateCart = function () {
             let total = 0;
             let ctotalProfit = 0;
@@ -578,6 +674,7 @@ if (auth == undefined) {
                 total += data.quantity * data.price;
                 // ctotalProfit += data.quantity * data.profit;
             });
+            Ttotal = total;
 
             //total = total - $("#inputDiscount").val();
             $('#price').text(total.toFixed(2) + " " + settings.symbol);
@@ -758,58 +855,170 @@ if (auth == undefined) {
 
         let printerName;
         let widthPage;
-        const print_data = [
-        //     {
-        //       type: 'image',                                       
-        //       path: 'assets/images/untitled.png',     // file path
-        //       position: 'center',                                  // position of image: 'left' | 'center' | 'right'
-        //       width: 60,                                           // width of image in px; default: auto
-        //       height: 60,                                          // width of image in px; default: 50 or '50px'
-        //    },
-           {
-            type: 'table',
-            // style the table
-            style: 'border: 1px solid #ddd',
-            // list of the columns to be rendered in the table header
-            tableHeader: ['Price', 'Qty', 'Item'],
-            // multi dimensional array depicting the rows and columns of the table body
-            tableBody: [
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
-                [2, 2,'وجبة مرح'],
 
-                ['subtotal',':',2],
-                ['Discount',':',2],
 
-            ],
-            // list of columns to be rendered in the table footer
-            // custom style for the table header
-            tableHeaderStyle: 'color: #000000;',
-            // custom style for the table body
-            tableBodyStyle: 'color:#000000;border: 0.5px solid #000; font-weight:bold;',
-            // custom style for the table footer
-            tableFooterStyle: 'color: #000000;',
-         }
-        ];
         $.fn.submitDueOrder = function (status) {
 
+
+            // let number=document.getElementById("transaction_note").value;  
+
+
+            // console.log(number);
+            console.log(printers);
+
+            for(var i=0; i< printers.length; i++){
+
+                printers[i].cart = [];
+                for(var f=0; f<cart.length; f++){
+
+                    console.log(cart[f].printer)
+                    if(cart[f].printer.includes(printers[i].name)){
+
+                        printers[i].cart.push(cart[f]);
+                    }
+                }
+
+                if( printers[i].cart.length!=0){
+
+                    const print_data = [
+                        {
+                            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                            value: 'SAMPLE HEADING',
+                            style: `text-align:center;margin-bottom:20px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                            css: {"font-weight": "700", "font-size": "18px"}
+                         },
+                         {
+                            type: 'image',                                       
+                            path: img_path + settings.img,     // file path
+                            position: 'center',                                  // position of image: 'left' | 'center' | 'right'
+                            width: 10,                                           // width of image in px; default: auto
+                            height: 10,
+                            style: `max-width: 50%`                                         // width of image in px; default: 50 or '50px'
+                         },
+                         {
+                            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                            value: settings.address_one,
+                            style: `text-align:right;margin-bottom:10px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                            css: {"font-weight": "700", "font-size": "12px"}
+                         },
+                         {
+                            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                            value: settings.address_two,
+                            style: `text-align:right;margin-bottom:10px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                            css: {"font-weight": "700", "font-size": "12px"}
+                         },
+                         {
+                            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                            value: settings.contact,
+                            style: `text-align:right;margin-bottom:10px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                            css: {"font-weight": "700", "font-size": "12px"}
+                         },
+                         {
+                            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                            value: '<hr>',
+                            style: `text-align:right;margin-bottom:10px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                            css: {"font-weight": "700", "font-size": "12px"}
+                         },
+
+                           {
+                            type: 'table',
+                            // style the table
+                            style: 'border: none; width: 300px;margin-bottom: 20px;',
+                            // list of the columns to be rendered in the table header
+                            tableHeader: ['Price', 'Qty', 'Item'],
+                            // multi dimensional array depicting the rows and columns of the table body
+                            tableBody: printers[i].cart.map(row => {
+                                return [row.price + settings.symbol, row.quantity, row.product_name];}),
+                            // list of columns to be rendered in the table footer
+                            // custom style for the table header
+                            tableHeaderStyle: 'color: #000000;',
+                            // custom style for the table body
+                            tableBodyStyle: 'color:#000000; border:none; font-weight:bold;',
+                            // custom style for the table footer
+                            tableFooterStyle: 'color: #000000;',
+                         },
+                         {
+                            type: 'table',
+                            // style the table
+                            style: 'border: none; width: 300px;',
+                            // list of the columns to be rendered in the table header
+                            // multi dimensional array depicting the rows and columns of the table body
+                            tableBody: [[Ttotal + settings.symbol,':',' Totals']],
+                            // list of columns to be rendered in the table footer
+                            // custom style for the table header
+                            tableHeaderStyle: 'color: #000000;border:none;',
+                            // custom style for the table body
+                            tableBodyStyle: 'color:#000000; border:none;margin-bottom:50px; font-weight:bold;font-size:18px;',
+                            // custom style for the table footer
+                            tableFooterStyle: 'color: #000000;border:none;',
+                         },
+       
+                         {
+                            type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                            value: settings.footer,
+                            style: `text-align:center;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                            css: {"font-weight": "700", "font-size": "12px", "width": "300px"}
+                         }
+                        ];
+                        let items = "";
+                        let payment = 0;
+                        widthPage = 300;
+                        printerName = printers[i].name;
+                        const options = {
+                            preview: false, // Preview in window or print
+                            width: widthPage, //  width of content body
+                            margin: "0 0 0 0", // margin of content body
+                            copies: 1, // Number of copies to print
+                            printerName: printerName, // printerName: string, check it at webContent.getPrinters()
+                            timeOutPerLine: 400,
+                            silent: true,
+                          };
+            
+                        if (printerName && widthPage) {
+                            PosPrinter.print(print_data, options)
+                              .then(() => {})
+                              .catch((error) => {
+                                console.error(error);
+                              });
+                          } else {
+                            alert("Select the printer and the width");
+                          }
+                }
+     
+            }
+
+            console.log(printers);
+
+            const print_data = [
+            //     {
+            //       type: 'image',                                       
+            //       path: 'assets/images/untitled.png',     // file path
+            //       position: 'center',                                  // position of image: 'left' | 'center' | 'right'
+            //       width: 60,                                           // width of image in px; default: auto
+            //       height: 60,                                          // width of image in px; default: 50 or '50px'
+            //    },
+               {
+                type: 'table',
+                // style the table
+                style: 'border: 1px solid #ddd',
+                // list of the columns to be rendered in the table header
+                tableHeader: ['Price', 'Qty', 'Item'],
+                // multi dimensional array depicting the rows and columns of the table body
+                tableBody: cart.map(row => {
+                    return [row.price, row.quantity, row.product_name];}),
+                // list of columns to be rendered in the table footer
+                // custom style for the table header
+                tableHeaderStyle: 'color: #000000;',
+                // custom style for the table body
+                tableBodyStyle: 'color:#000000;border: 0.5px solid #000; font-weight:bold;',
+                // custom style for the table footer
+                tableFooterStyle: 'color: #000000;',
+             }
+            ];
             let items = "";
             let payment = 0;
             widthPage = 300;
-            printerName = "Microsoft Print to PDF";
+            printerName = Settings.printer;
             const options = {
                 preview: false, // Preview in window or print
                 width: widthPage, //  width of content body
@@ -1039,7 +1248,7 @@ if (auth == undefined) {
                     cart = [];
                     $('#viewTransaction').html('');
                     $('#viewTransaction').html(receipt);
-                    $('#orderModal').modal('show');
+                    // $('#orderModal').modal('show');
                     loadProducts();
                     loadCustomers();
                     $(".loading").hide();
@@ -2114,6 +2323,20 @@ if (auth == undefined) {
     });
 
 
+    
+    function loadSettings(){
+
+        $.get(api + 'settings/get', function (data) {
+
+            
+
+            Settings =data.settings;
+            console.log(Settings);
+            });
+
+    }
+
+
     $('#rmv_logo').click(function () {
         $('#remove_logo').val("1");
         $('#current_logo').hide(500);
@@ -2392,8 +2615,15 @@ $.fn.deleteTransaction = function(id){
     }).then((result) => {
 
         if (result.value) {
-            $.post(api + 'transactions/delete/' + id, function (data) {
-                console.log(data);
+            $.ajax({
+                url: api + 'delete/' + id,
+                type: 'DELETE',
+                success: function (result) {
+
+                    loadTransactions();
+               
+
+                }
             });
         }
     });

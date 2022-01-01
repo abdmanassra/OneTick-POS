@@ -78,6 +78,7 @@ app.post( "/post", upload.single('imagename'), function ( req, res ) {
             "address_two":req.body.address_two,
             "contact": req.body.contact,
             "view": req.body.view,
+            "printer": req.body.dprinter,
             "tax": req.body.tax,
             "symbol": req.body.symbol,
             "percentage": req.body.percentage,
