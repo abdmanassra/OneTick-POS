@@ -883,7 +883,7 @@ if (auth == undefined) {
                     const print_data = [
                         {
                             type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-                            value: 'عرب فرايد تشكن',
+                            value: settings.store,
                             style: `text-align:center;margin-bottom:20px;font-family:'Baloo Bhaijaan 2', cursive !important`,
                             css: {"font-weight": "700", "font-size": "18px"}
                          },
@@ -1008,7 +1008,7 @@ if (auth == undefined) {
             const print_data = [
                 {
                     type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-                    value: 'عرب فرايد تشكن',
+                    value: settings.store,
                     style: `text-align:center;margin-bottom:20px;font-family:'Baloo Bhaijaan 2', cursive !important`,
                     css: {"font-weight": "700", "font-size": "18px"}
                  },
