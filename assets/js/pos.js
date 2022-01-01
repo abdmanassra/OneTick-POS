@@ -178,6 +178,16 @@ if (auth == undefined) {
         loadProducts();
         loadCustomers();
         // loadSettings();
+        notiflix.Notify.init({  
+            warning: {
+            background: '#a82d2d',
+            textColor: '#fff',
+            childClassName: 'notiflix-notify-warning',
+            notiflixIconColor: 'rgb(255,255,255)',
+            fontAwesomeClassName: 'fas fa-exclamation-circle',
+            fontAwesomeIconColor: 'rgba(0,0,0,0.2)',
+            backOverlayColor: 'rgba(238,191,49,0.2)',
+          }});
 
         if (settings && settings.symbol) {
             $("#price_curr, #payment_curr, #change_curr").text(settings.symbol);
@@ -250,18 +260,7 @@ if (auth == undefined) {
                 success: function(data) {
                     var date = new Date().toDateString();
                     if (daysBetween(date, data) < 15) {
-                        $( ".contractEndSoonMessage" ).append( $( "<div id='contractEndSoonMessageTemp'> " + 
-                                                    "<div class='alert alert-warning alert-dismissible  m-t-5' role='alert'> " + 
-                                                    " سوف ينتهي ترخيص البرنامج خلال <span id='numberOfDays'>"+
-                                                     daysBetween(date, data) + 
-                                                    "</span>ايام" + 
-                                                    " يرجى التواصل مع فريق التطوير لتجديد ترخيص البرنامج  </div></div>" ) );
-
-                        window.setTimeout(function() {
-                            $("#contractEndSoonMessageTemp").fadeTo(1000, 0).slideUp(1000, function(){
-                                $(this).remove(); 
-                            });
-                        }, 4500);
+                        notiflix.Notify.warning(` سوف ينتهي ترخيص البرنامج خلال` + daysBetween(date, data) + ` ايام`, {position: 'right-bottom', rtl: true, backOverlayColor: 'rgba(245, 40, 145, 0.8)'});
                     }
                 }
             });
@@ -2085,6 +2084,32 @@ if (auth == undefined) {
 
         });
 
+
+        function startJobAt(hh, mm, code) {
+            var interval = 0;
+            var today = new Date();
+            var todayHH = today.getHours();
+            var todayMM = today.getMinutes();
+            if ((todayHH > hh) || (todayHH == hh && todayMM > mm)) {
+                var midnight = new Date();
+                midnight.setHours(24,0,0,0);
+                interval = midnight.getTime() - today.getTime() +
+                        (hh * 60 * 60 * 1000) + (mm * 60 * 1000);
+            } else {
+                interval = (hh - todayHH) * 60 * 60 * 1000 + (mm - todayMM) * 60 * 1000;
+            }
+            return setInterval(code, interval);
+        }
+
+        function logOut() {
+            $.get(api + 'users/logout/' + user._id, function (data) {
+                storage.delete('auth');
+                storage.delete('user');
+                ipcRenderer.send('app-reload', '');
+            });
+          }
+
+          startJobAt(3, 00, logOut);
 
     });
 

@@ -14,6 +14,9 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 const contextMenu = require('electron-context-menu');
 
 let mainWindow
+let AppTray = null;
+
+const iconPath = path.join(__dirname, 'assets/images/appIcon.png');
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -25,6 +28,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    iconPath
   });
 
   mainWindow.maximize();
@@ -72,12 +76,12 @@ ipcMain.on('app-reload', (event, arg) => {
 contextMenu({
   prepend: (params, browserWindow) => [
 
-    //{
-    // label: 'DevTools',
-    // click(item, focusedWindow) {
-    //  focusedWindow.toggleDevTools();
-    // }
-    //},
+    {
+    label: 'DevTools',
+    click(item, focusedWindow) {
+     focusedWindow.toggleDevTools();
+    }
+    },
     {
       label: "Reload",
       click() {
