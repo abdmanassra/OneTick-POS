@@ -131,16 +131,23 @@ app.put("/new", function (req, res) {
 });
 
 
-app.post("/delete", function (req, res) {
+app.delete("/delete/:transactionId", function (req, res) {
   let transaction = req.body;
   transactionsDB.remove({
-    _id: transaction.orderId
+    _id: parseInt(req.params.transactionId)
   }, function (err, numRemoved) {
     if (err) res.status(500).send(err);
     else res.sendStatus(200);
   });
 });
-
+app.post("/deleteAll", function (req, res) {
+  transactionsDB.remove({
+    multi: true
+  }, function (err, numRemoved) {
+    if (err) res.status(500).send(err);
+    else res.sendStatus(200);
+  });
+});
 
 
 app.get("/:transactionId", function (req, res) {
