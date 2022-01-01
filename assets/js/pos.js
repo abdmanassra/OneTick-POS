@@ -860,10 +860,10 @@ if (auth == undefined) {
         $.fn.submitDueOrder = function (status) {
 
 
-            // let number=document.getElementById("transaction_note").value;  
+            let number=document.getElementById("transaction_note").value;  
 
 
-            // console.log(number);
+            console.log(number);
             console.log(printers);
 
             for(var i=0; i< printers.length; i++){
@@ -883,7 +883,7 @@ if (auth == undefined) {
                     const print_data = [
                         {
                             type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-                            value: 'SAMPLE HEADING',
+                            value: 'عرب فرايد تشكن',
                             style: `text-align:center;margin-bottom:20px;font-family:'Baloo Bhaijaan 2', cursive !important`,
                             css: {"font-weight": "700", "font-size": "18px"}
                          },
@@ -954,6 +954,22 @@ if (auth == undefined) {
                          },
        
                          {
+                            type: 'table',
+                            // style the table
+                            style: 'border: none; width: 300px;',
+                            // list of the columns to be rendered in the table header
+                            // multi dimensional array depicting the rows and columns of the table body
+                            tableBody: [[number ,' :ملاحظة']],
+                            // list of columns to be rendered in the table footer
+                            // custom style for the table header
+                            tableHeaderStyle: 'color: #000000;border:none;',
+                            // custom style for the table body
+                            tableBodyStyle: 'color:#000000; border:none;margin-bottom:50px; font-weight:bold;font-size:12px;',
+                            // custom style for the table footer
+                            tableFooterStyle: 'color: #000000;border:none;',
+                         },
+       
+                         {
                             type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
                             value: settings.footer,
                             style: `text-align:center;font-family:'Baloo Bhaijaan 2', cursive !important`,
@@ -990,31 +1006,101 @@ if (auth == undefined) {
             console.log(printers);
 
             const print_data = [
-            //     {
-            //       type: 'image',                                       
-            //       path: 'assets/images/untitled.png',     // file path
-            //       position: 'center',                                  // position of image: 'left' | 'center' | 'right'
-            //       width: 60,                                           // width of image in px; default: auto
-            //       height: 60,                                          // width of image in px; default: 50 or '50px'
-            //    },
-               {
-                type: 'table',
-                // style the table
-                style: 'border: 1px solid #ddd',
-                // list of the columns to be rendered in the table header
-                tableHeader: ['Price', 'Qty', 'Item'],
-                // multi dimensional array depicting the rows and columns of the table body
-                tableBody: cart.map(row => {
-                    return [row.price, row.quantity, row.product_name];}),
-                // list of columns to be rendered in the table footer
-                // custom style for the table header
-                tableHeaderStyle: 'color: #000000;',
-                // custom style for the table body
-                tableBodyStyle: 'color:#000000;border: 0.5px solid #000; font-weight:bold;',
-                // custom style for the table footer
-                tableFooterStyle: 'color: #000000;',
-             }
-            ];
+                {
+                    type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                    value: 'عرب فرايد تشكن',
+                    style: `text-align:center;margin-bottom:20px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                    css: {"font-weight": "700", "font-size": "18px"}
+                 },
+                 {
+                    type: 'image',                                       
+                    path: img_path + settings.img,     // file path
+                    position: 'center',                                  // position of image: 'left' | 'center' | 'right'
+                    width: 10,                                           // width of image in px; default: auto
+                    height: 10,
+                    style: `max-width: 50%`                                         // width of image in px; default: 50 or '50px'
+                 },
+                 {
+                    type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                    value: settings.address_one,
+                    style: `text-align:right;margin-bottom:10px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                    css: {"font-weight": "700", "font-size": "12px"}
+                 },
+                 {
+                    type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                    value: settings.address_two,
+                    style: `text-align:right;margin-bottom:10px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                    css: {"font-weight": "700", "font-size": "12px"}
+                 },
+                 {
+                    type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                    value: settings.contact,
+                    style: `text-align:right;margin-bottom:10px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                    css: {"font-weight": "700", "font-size": "12px"}
+                 },
+                 {
+                    type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                    value: '<hr>',
+                    style: `text-align:right;margin-bottom:10px;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                    css: {"font-weight": "700", "font-size": "12px"}
+                 },
+
+                   {
+                    type: 'table',
+                    // style the table
+                    style: 'border: none; width: 300px;margin-bottom: 20px;',
+                    // list of the columns to be rendered in the table header
+                    tableHeader: ['Price', 'Qty', 'Item'],
+                    // multi dimensional array depicting the rows and columns of the table body
+                    tableBody: cart.map(row => {
+                        return [row.price, row.quantity, row.product_name];}),
+                    // list of columns to be rendered in the table footer
+                    // custom style for the table header
+                    tableHeaderStyle: 'color: #000000;',
+                    // custom style for the table body
+                    tableBodyStyle: 'color:#000000; border:none; font-weight:bold;',
+                    // custom style for the table footer
+                    tableFooterStyle: 'color: #000000;',
+                 },
+                 {
+                    type: 'table',
+                    // style the table
+                    style: 'border: none; width: 300px;',
+                    // list of the columns to be rendered in the table header
+                    // multi dimensional array depicting the rows and columns of the table body
+                    tableBody: [[Ttotal + settings.symbol,':',' Totals']],
+                    // list of columns to be rendered in the table footer
+                    // custom style for the table header
+                    tableHeaderStyle: 'color: #000000;border:none;',
+                    // custom style for the table body
+                    tableBodyStyle: 'color:#000000; border:none;margin-bottom:50px; font-weight:bold;font-size:18px;',
+                    // custom style for the table footer
+                    tableFooterStyle: 'color: #000000;border:none;',
+                 },
+
+                 {
+                    type: 'table',
+                    // style the table
+                    style: 'border: none; width: 300px;',
+                    // list of the columns to be rendered in the table header
+                    // multi dimensional array depicting the rows and columns of the table body
+                    tableBody: [[number ,' :ملاحظة']],
+                    // list of columns to be rendered in the table footer
+                    // custom style for the table header
+                    tableHeaderStyle: 'color: #000000;border:none;',
+                    // custom style for the table body
+                    tableBodyStyle: 'color:#000000; border:none;margin-bottom:50px; font-weight:bold;font-size:12px;',
+                    // custom style for the table footer
+                    tableFooterStyle: 'color: #000000;border:none;',
+                 },
+
+                 {
+                    type: 'text',                                       // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
+                    value: settings.footer,
+                    style: `text-align:center;font-family:'Baloo Bhaijaan 2', cursive !important`,
+                    css: {"font-weight": "700", "font-size": "12px", "width": "300px"}
+                 }
+                ];
             let items = "";
             let payment = 0;
             widthPage = 300;
@@ -1038,6 +1124,9 @@ if (auth == undefined) {
               } else {
                 alert("Select the printer and the width");
               }
+
+              $("#transaction_note").val('');
+
 
             cart.forEach(item => {
 
