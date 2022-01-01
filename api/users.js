@@ -8,7 +8,7 @@ const exec = util.promisify(require('child_process').exec);
 module.exports = app;
 //using firebase
 var firebase = require('./firebaseConfig');
-const env = 'testEnv';
+const env = 'Razan';
 const usersDb = firebase.db.collection('accounts').doc(env).collection('users'); 
 const mainInfo = firebase.db.collection('accounts').doc(env);
 let customerStatus = "disabled";

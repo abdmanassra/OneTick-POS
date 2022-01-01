@@ -2359,6 +2359,9 @@ if (auth == undefined) {
                 $("#address_two").val(settings.address_two);
                 $("#contact").val(settings.contact);
                 $("#tax").val(settings.tax);
+                $("#view").val(settings.view);
+                $("#printer1").val(settings.printer);
+
                 $("#symbol").val(settings.symbol);
                 $("#percentage").val(settings.percentage);
                 $("#footer").val(settings.footer);
