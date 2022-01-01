@@ -10,7 +10,7 @@ resultPromise = electronInstaller.createWindowsInstaller({
     noMsi: true,
     exe: 'pos.exe',
     setupExe: 'POSInstaller.exe',
-    setupIcon: path.join(rootPath, 'assets', 'images', 'icon.ico')
+    setupIcon: path.join(rootPath, 'assets', 'images', 'appIcon.ico')
   });
 
 resultPromise.then(() => console.log("It worked!"), (e) => console.log(`No dice: ${e.message}`));
