@@ -1,5 +1,5 @@
-<img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/d6ef3399-a6e1-4446-9511-c802f8c20f14" alt="POS System" width="150" height="80">
 # OneClick POST - Arabic POS System (RTL) with Orders, Reports, and Card Payment
+<img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/d6ef3399-a6e1-4446-9511-c802f8c20f14" alt="POS System" width="200" height="100" style="background-color: black; padding: 5px;">
 
 ## Overview
 
