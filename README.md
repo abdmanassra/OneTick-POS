@@ -1,5 +1,5 @@
 # OneClick POS - Arabic POS System (RTL) with Orders, Reports, and Card Payment
-<center><img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/719afaae-9596-4410-88fb-e81f2e2ed1ec" alt="POS System" width="450" height="260" style="background-color: black; padding: 5px;"></center>
+<center><img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/719afaae-9596-4410-88fb-e81f2e2ed1ec" alt="POS System" width="450" height="275" style="background-color: black; padding: 5px;"></center>
 <br />
 <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/d835539e-2306-4656-bed6-ad054448896d" alt="POS System" width="200" height="130" style="background-color: black; padding: 5px;">
 <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/e78b7418-01b2-4979-9388-8b08a2d842d2" alt="POS System" width="200" height="130" style="background-color: black; padding: 5px;">
