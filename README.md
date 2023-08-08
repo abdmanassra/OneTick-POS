@@ -1,6 +1,6 @@
 # OneClick POST - Arabic POS System (RTL) with Orders, Reports, and Card Payment
 
-![POS System](pos_system_screenshot.png)
+<img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/d6ef3399-a6e1-4446-9511-c802f8c20f14" alt="POS System" width="50" height="50">
 
 ## Overview
 
