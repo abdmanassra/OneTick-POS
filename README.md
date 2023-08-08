@@ -1,11 +1,11 @@
 # OneClick POS - Arabic POS System (RTL) with Orders, Reports, and Card Payment
 <p align="center">
-        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/719afaae-9596-4410-88fb-e81f2e2ed1ec" alt="POS System" width="430" height="275" style="padding: 5px;">
+        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/6d8bdc82-0397-45f2-8eba-dd1ac233af43" alt="POS System" width="430" height="275" style="padding: 5px;">
         <br>
-        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/d835539e-2306-4656-bed6-ad054448896d" alt="POS System" width="200" height="130" style="padding: 5px;">
-        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/e78b7418-01b2-4979-9388-8b08a2d842d2" alt="POS System" width="200" height="130" style="padding: 5px;">
-        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/1a0f19e2-faba-4571-9c5f-ccb79d280d6b" alt="POS System" width="200" height="130" style="padding: 5px;">
-        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/d3de0da7-f914-463b-8447-3b5d046233ce" alt="POS System" width="200" height="130" style="padding: 5px;">
+        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/90fd1479-d628-4935-b531-778059c9eff5" alt="POS System" width="200" height="130" style="padding: 5px;">
+        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/d3734101-ba07-4fd6-a9dc-1d122eab0049" alt="POS System" width="200" height="130" style="padding: 5px;">
+        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/8149ece7-20f8-4d04-bc94-7b2726f18225" alt="POS System" width="200" height="130" style="padding: 5px;">
+        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/19347387-e22d-47a7-8fa7-1ec0d8a67bf0" alt="POS System" width="200" height="130" style="padding: 5px;">
 </p>
 
 ## Overview
