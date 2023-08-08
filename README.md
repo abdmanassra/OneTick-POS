@@ -45,3 +45,10 @@ For secure payments:
 1. Clone this repository to your local machine.
    ```sh
    git clone https://github.com/abdmanassra/oneclick-pos-client.git
+2. Install the required dependencies.
+     ```sh
+   npm install
+3. Run the application.
+      ```sh
+   npm start
+
