@@ -61,7 +61,15 @@ To deploy the POS system as a desktop application:
 1. Build the desktop app.
    ```sh
    npm run build-desktop
+   
+### Web App
 
+To deploy the POS system as a web application:
+
+1. Build the web app:
+  ```sh
+   npm run build-web
+2. Deploy the contents of the `dist/web` directory to a web server or hosting platform.
 
 ## Localization (RTL Support)
 
