@@ -44,4 +44,4 @@ For secure payments:
 
 1. Clone this repository to your local machine.
    ```sh
-   git clone https://github.com/your-username/arabic-pos-system.git
+   git clone [https://github.com/your-username/arabic-pos-system.git](https://github.com/abdmanassra/oneclick-pos-client.git)https://github.com/abdmanassra/oneclick-pos-client.git
