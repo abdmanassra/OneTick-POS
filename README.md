@@ -61,3 +61,19 @@ To deploy the POS system as a desktop application:
 1. Build the desktop app.
    ```sh
    npm run build-desktop
+
+
+## Localization (RTL Support)
+
+The application is designed with RTL layout support for Arabic language. This ensures a seamless user experience for Arabic-speaking users.
+
+## Contributions
+
+Contributions are welcome! If you have any improvements or feature suggestions, feel free to submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+By Abdalraheem Manassra(https://github.com/abdmanassra) and Razan Taha(https://github.com/RazanMahmoud) - Feel free to reach out with any questions or feedback., LinkedIn(https://www.linkedin.com/in/manassra94/)
