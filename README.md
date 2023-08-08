@@ -52,3 +52,12 @@ For secure payments:
       ```sh
    npm start
 
+## Deployment
+
+### Desktop App
+
+To deploy the POS system as a desktop application:
+
+1. Build the desktop app.
+   ```sh
+   npm run build-desktop
