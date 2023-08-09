@@ -1,6 +1,6 @@
 # OneTick POS - Arabic POS System (RTL) with Orders, Reports, and Card Payment
 <p align="center">
-        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/6d8bdc82-0397-45f2-8eba-dd1ac233af43" alt="POS System" width="430" height="275" style="padding: 5px;">
+        <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/6d8bdc82-0397-45f2-8eba-dd1ac233af43" alt="POS System" width="500" height="355" style="padding: 5px;">
         <br>
         <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/90fd1479-d628-4935-b531-778059c9eff5" alt="POS System" width="200" height="130" style="padding: 5px;">
         <img src="https://github.com/abdmanassra/oneclick-pos-client/assets/40340485/d3734101-ba07-4fd6-a9dc-1d122eab0049" alt="POS System" width="200" height="130" style="padding: 5px;">
